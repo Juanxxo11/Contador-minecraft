@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador Regresivo Minecraft</title>
+    <!-- Fuente estilo Pixel / Minecraft desde Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        body {
+            /* Fondo con la imagen del juego */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('fondo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            background-color: rgba(30, 30, 30, 0.85);
+            border: 4px solid #000000;
+            box-shadow: 
+                inset -4px -4px 0px 0px #1e1e1e,
+                inset 4px 4px 0px 0px #5a5a5a,
+                0px 8px 16px rgba(0,0,0,0.8);
+            padding: 20px 15px;
+            width: 100%;
+            max-width: 360px;
+            border-radius: 2px;
+            backdrop-filter: blur(2px);
+        }
+
+        h1 {
+            font-size: 14px;
+            color: #FFFF55; /* Amarillo Minecraft */
+            text-shadow: 2px 2px 0px #3f3f00;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .countdown-box {
+            background-color: rgba(0, 0, 0, 0.75);
+            border: 3px solid #3c3c3c;
+            padding: 15px 10px;
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .number {
+            font-size: 18px;
+            color: #55FF55; /* Verde Minecraft */
+            text-shadow: 2px 2px 0px #003f00;
+            margin-bottom: 5px;
+        }
+
+        .label {
+            font-size: 8px;
+            color: #AAAAAA;
+            text-transform: uppercase;
+        }
+
+        .alert-banner {
+            display: none;
+            background-color: rgba(170, 0, 0, 0.9);
+            border: 2px solid #FF5555;
+            color: #FFFFFF;
+            font-size: 8px;
+            padding: 8px;
+            margin-top: 12px;
+            line-height: 1.4;
+            text-shadow: 1px 1px 0px #000;
+        }
+
+        .status-btn {
+            background-color: #55FF55;
+            border: 3px solid #00AA00;
+            border-bottom-color: #003f00;
+            border-right-color: #003f00;
+            color: #000000;
+            font-size: 9px;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .status-btn:active {
+            border: 3px solid #003f00;
+            border-bottom-color: #55FF55;
+            border-right-color: #55FF55;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>TIEMPO RESTANTE</h1>
+        
+        <div class="countdown-box">
+            <div class="time-unit">
+                <span id="days" class="number">00</span>
+                <span class="label">Días</span>
+            </div>
+            <div class="time-unit">
+                <span id="hours" class="number">00</span>
+                <span class="label">Horas</span>
+            </div>
+            <div class="time-unit">
+                <span id="minutes" class="number">00</span>
+                <span class="label">Minutos</span>
+            </div>
+            <div class="time-unit">
+                <span id="seconds" class="number">00</span>
+                <span class="label">Segundos</span>
+            </div>
+        </div>
+
+        <button id="notify-btn" class="status-btn" onclick="requestNotificationPermission()">Activar Notificaciones</button>
+
+        <div id="alert-banner" class="alert-banner">
+            ⚠️ Las notificaciones están desactivadas o no son compatibles con este navegador.
+        </div>
+    </div>
+
+    <script>
+        // Sábado 26 de septiembre de 2026 a las 3:00 p.m. (15:00) Hora Colombia (UTC-5)
+        const targetDate = new Date("2026-09-26T15:00:00-05:00").getTime();
+        let lastNotifiedHour = -1;
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance <= 0) {
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = String(days).padStart(2, '0');
+            document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+
+            // Notificación periódica cada hora
+            const currentHour = new Date().getHours();
+            if (minutes === 0 && seconds === 0 && currentHour !== lastNotifiedHour) {
+                sendNotification(`¡Faltan ${days} días y ${hours} horas para el evento!`);
+                lastNotifiedHour = currentHour;
+            }
+        }
+
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                showBanner();
+                return;
+            }
+
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    document.getElementById("notify-btn").style.display = "none";
+                    document.getElementById("alert-banner").style.display = "none";
+                    new Notification("¡Notificaciones activadas!", {
+                        body: "Recibirás alertas del contador."
+                    });
+                } else {
+                    showBanner();
+                }
+            });
+        }
+
+        function sendNotification(message) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification("Contador Minecraft", {
+                    body: message
+                });
+            }
+        }
+
+        function showBanner() {
+            document.getElementById("alert-banner").style.display = "block";
+            document.getElementById("notify-btn").style.display = "none";
+        }
+
+        if ("Notification" in window) {
+            if (Notification.permission === "denied") {
+                showBanner();
+            } else if (Notification.permission === "granted") {
+                document.getElementById("notify-btn").style.display = "none";
+            }
+        } else {
+            showBanner();
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
