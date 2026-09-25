@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Falta para jugar Minecraft el sábado a las 3 pm</title>
-    <!-- Fuente estilo Pixel / Minecraft desde Google Fonts -->
+    <title>INGENIEROS³ - Tiempo Restante para la Aventura</title>
+    <!-- Fuente estilo Pixel / Minecraft -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * {
@@ -15,8 +15,9 @@
         }
 
         body {
-            /* Enlace directo a la imagen cargada para asegurar que el fondo siempre se muestre */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('https://lh3.googleusercontent.com/d/1Xsh1i1_E83jC6I_o5d3R_u_24e3p');
+            background-color: #1a1a1a;
+            /* Fondo de Minecraft */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://lh3.googleusercontent.com/d/1Xsh1i1_E83jC6I_o5d3R_u_24e3p');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -32,30 +33,50 @@
         }
 
         .container {
-            background-color: rgba(30, 30, 30, 0.85);
+            background-color: rgba(20, 20, 20, 0.88);
             border: 4px solid #000000;
             box-shadow: 
                 inset -4px -4px 0px 0px #1e1e1e,
                 inset 4px 4px 0px 0px #5a5a5a,
-                0px 8px 16px rgba(0,0,0,0.8);
-            padding: 20px 15px;
+                0px 10px 20px rgba(0,0,0,0.9);
+            padding: 22px 16px;
             width: 100%;
-            max-width: 360px;
+            max-width: 370px;
             border-radius: 2px;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(4px);
         }
 
-        h1 {
-            font-size: 13px;
+        .main-title {
+            font-size: 22px;
+            color: #FFAA00; /* Dorado Minecraft */
+            text-shadow: 3px 3px 0px #3F2A00;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 9px;
             color: #FFFF55; /* Amarillo Minecraft */
             text-shadow: 2px 2px 0px #3f3f00;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
             line-height: 1.5;
             text-transform: uppercase;
         }
 
+        /* Frase gamer dinámicas */
+        .gamer-phrase {
+            font-size: 8px;
+            color: #55FFFF; /* Cían / Diamante */
+            text-shadow: 1px 1px 0px #003f3f;
+            margin-bottom: 18px;
+            line-height: 1.4;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px;
+            border: 2px dashed #00AAAA;
+        }
+
         .countdown-box {
-            background-color: rgba(0, 0, 0, 0.75);
+            background-color: rgba(0, 0, 0, 0.8);
             border: 3px solid #3c3c3c;
             padding: 15px 10px;
             margin-bottom: 15px;
@@ -71,7 +92,7 @@
         }
 
         .number {
-            font-size: 18px;
+            font-size: 20px;
             color: #55FF55; /* Verde Minecraft */
             text-shadow: 2px 2px 0px #003f00;
             margin-bottom: 5px;
@@ -102,7 +123,7 @@
             border-right-color: #003f00;
             color: #000000;
             font-size: 9px;
-            padding: 10px;
+            padding: 11px;
             cursor: pointer;
             width: 100%;
         }
@@ -117,7 +138,12 @@
 <body>
 
     <div class="container">
-        <h1>Falta para jugar Minecraft el sábado a las 3 pm</h1>
+        <h1 class="main-title">INGENIEROS³</h1>
+        <p class="subtitle">TIEMPO RESTANTE PARA LA AVENTURA</p>
+
+        <div id="phrase" class="gamer-phrase">
+            ⚔️ ¡AFILANDO LAS ESPADAS Y ENCANTANDO PICOS! 🛡️
+        </div>
         
         <div class="countdown-box">
             <div class="time-unit">
@@ -146,9 +172,23 @@
     </div>
 
     <script>
-        // Sábado 26 de septiembre de 2026 a las 3:00 p.m. (15:00) Hora Colombia (UTC-5)
+        // Sábado 26 de septiembre de 2026 a las 3:00 p.m. Hora Colombia (UTC-5)
         const targetDate = new Date("2026-09-26T15:00:00-05:00").getTime();
         let lastNotifiedHour = -1;
+
+        const phrases = [
+            "⚔️ ¡AFILANDO ESPADAS Y ENCANTANDO PICOS!",
+            "💎 PREPARANDO LAS ARMADURAS DE DIAMANTE...",
+            "🔥 EL PORTAL DEL NETHER ESTÁ ENCENDIDO...",
+            "🚀 ¡CONSTRUYENDO LA BASE DEFINITIVA!",
+            "🛡️ INGENIEROS³ LISTOS PARA LA AVENTURA"
+        ];
+
+        let phraseIndex = 0;
+        setInterval(() => {
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            document.getElementById("phrase").innerText = phrases[phraseIndex];
+        }, 5000);
 
         function updateCountdown() {
             const now = new Date().getTime();
@@ -159,6 +199,7 @@
                 document.getElementById("hours").innerText = "00";
                 document.getElementById("minutes").innerText = "00";
                 document.getElementById("seconds").innerText = "00";
+                document.getElementById("phrase").innerText = "🔥 ¡EL SERVIDOR ESTÁ ABIERTO! A JUGAR 🔥";
                 return;
             }
 
@@ -172,10 +213,9 @@
             document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
             document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
 
-            // Alerta por notificación cada hora
             const currentHour = new Date().getHours();
             if (minutes === 0 && seconds === 0 && currentHour !== lastNotifiedHour) {
-                sendNotification(`¡Faltan ${days} días y ${hours} horas para jugar Minecraft!`);
+                sendNotification(`¡Faltan ${days}d ${hours}h para la aventura de INGENIEROS³!`);
                 lastNotifiedHour = currentHour;
             }
         }
@@ -191,7 +231,7 @@
                     document.getElementById("notify-btn").style.display = "none";
                     document.getElementById("alert-banner").style.display = "none";
                     new Notification("¡Notificaciones activadas!", {
-                        body: "Te avisaremos cada hora cuánto falta para jugar."
+                        body: "Te avisaremos cada hora cuánto falta para la aventura de INGENIEROS³."
                     });
                 } else {
                     showBanner();
@@ -201,7 +241,7 @@
 
         function sendNotification(message) {
             if ("Notification" in window && Notification.permission === "granted") {
-                new Notification("Contador Minecraft", {
+                new Notification("INGENIEROS³", {
                     body: message
                 });
             }
