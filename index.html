@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contador Regresivo Minecraft</title>
+    <title>Falta para jugar Minecraft el sábado a las 3 pm</title>
     <!-- Fuente estilo Pixel / Minecraft desde Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
@@ -15,8 +15,8 @@
         }
 
         body {
-            /* Fondo con la imagen del juego */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('fondo.jpg');
+            /* Enlace directo a la imagen cargada para asegurar que el fondo siempre se muestre */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('https://lh3.googleusercontent.com/d/1Xsh1i1_E83jC6I_o5d3R_u_24e3p');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -46,11 +46,12 @@
         }
 
         h1 {
-            font-size: 14px;
+            font-size: 13px;
             color: #FFFF55; /* Amarillo Minecraft */
             text-shadow: 2px 2px 0px #3f3f00;
             margin-bottom: 20px;
-            line-height: 1.4;
+            line-height: 1.5;
+            text-transform: uppercase;
         }
 
         .countdown-box {
@@ -116,7 +117,7 @@
 <body>
 
     <div class="container">
-        <h1>TIEMPO RESTANTE</h1>
+        <h1>Falta para jugar Minecraft el sábado a las 3 pm</h1>
         
         <div class="countdown-box">
             <div class="time-unit">
@@ -171,10 +172,10 @@
             document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
             document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
 
-            // Notificación periódica cada hora
+            // Alerta por notificación cada hora
             const currentHour = new Date().getHours();
             if (minutes === 0 && seconds === 0 && currentHour !== lastNotifiedHour) {
-                sendNotification(`¡Faltan ${days} días y ${hours} horas para el evento!`);
+                sendNotification(`¡Faltan ${days} días y ${hours} horas para jugar Minecraft!`);
                 lastNotifiedHour = currentHour;
             }
         }
@@ -190,7 +191,7 @@
                     document.getElementById("notify-btn").style.display = "none";
                     document.getElementById("alert-banner").style.display = "none";
                     new Notification("¡Notificaciones activadas!", {
-                        body: "Recibirás alertas del contador."
+                        body: "Te avisaremos cada hora cuánto falta para jugar."
                     });
                 } else {
                     showBanner();
